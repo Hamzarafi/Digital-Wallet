@@ -7,11 +7,13 @@ import {
 
 function Home() {
   return (
-    <div className="homeOuterContainer">
-      <WelcomeComponent />
-      <div className="homeInnerContainer">
-        <CreditCardList />
-        <Transactions />
+    <div style={{ display: "flex", justifyContent: "center" }}>
+      <div className="homeOuterContainer">
+        <WelcomeComponent isMobile={false} />
+        <div className="homeInnerContainer">
+          <CreditCardList isMobile={false} />
+          <Transactions />
+        </div>
       </div>
     </div>
   );
