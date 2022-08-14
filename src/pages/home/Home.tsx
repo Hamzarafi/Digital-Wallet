@@ -5,6 +5,8 @@ import {
   WelcomeComponent,
 } from "../../components";
 
+//mobile view width less tha 950
+
 function Home() {
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
