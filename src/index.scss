@@ -5,18 +5,24 @@ body {
       sans-serif;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    background-color: var(--color-light-grey);
+    color: var(--color-text-darker);
+    font-weight: var(--fontWeight-regular);
+    font-size: var(--fontSize-md);
   }
 
+ 
+
   .homeOuterContainer{
+    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
-    height: 100vh;
     
     .homeInnerContainer{
         display: flex;
         flex-direction: row;
+        height: 75%;
     }
   }
   
