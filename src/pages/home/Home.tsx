@@ -6,6 +6,7 @@ import {
   Transactions,
   WelcomeComponent,
 } from "../../components";
+import { Card, Response } from "../../models/Objects/Response";
 import { MOBILE_DIMENSION } from "../../utilities/utils";
 import useWindowSize from "../../utilities/windowResize/windowResize";
 
@@ -13,6 +14,8 @@ function Home() {
   const [pageWidth] = useWindowSize();
 
   const [isMobile, setIsMobile] = useState(false);
+  const [apiData, setApiData] = useState<Response>();
+  const [selectedCard, setSelectedCard] = useState<Card>();
 
   useEffect(() => {
     if (pageWidth < MOBILE_DIMENSION) {
@@ -22,17 +25,53 @@ function Home() {
     }
   }, [pageWidth]);
 
+  useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
+    fetch("https://62f63c8f612c13062b4997c6.mockapi.io/user/4846457457")
+      .then((response) => response.json())
+      .then((res) => {
+        setApiData(res);
+        if (res.cards && res.cards.length > 0) setSelectedCard(res.cards[0]);
+      });
+  };
+
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
       <div className="homeOuterContainer">
-        <WelcomeComponent isMobile={isMobile} />
+        <WelcomeComponent
+          isMobile={isMobile}
+          firstName={apiData?.firstName}
+          lastName={apiData?.lastName}
+          gender={apiData?.gender}
+        />
         <div
           className={`${
             isMobile ? "homeInnerMobileContainer" : "homeInnerContainer"
           }`}
         >
-          {isMobile ? <CreditCardListMobile /> : <CreditCardList />}
-          <Transactions isMobile={isMobile} />
+          {isMobile ? (
+            <CreditCardListMobile
+              cards={apiData?.cards}
+              name={`${apiData?.firstName} ${apiData?.lastName}`}
+              onCardClick={setSelectedCard}
+              refetch={getData}
+            />
+          ) : (
+            <CreditCardList
+              cards={apiData?.cards}
+              name={`${apiData?.firstName} ${apiData?.lastName}`}
+              onCardClick={setSelectedCard}
+              refetch={getData}
+            />
+          )}
+          <Transactions
+            isMobile={isMobile}
+            selectedCard={selectedCard}
+            currencyData={apiData?.currencyExchangeRates}
+          />
         </div>
       </div>
       {isMobile && (

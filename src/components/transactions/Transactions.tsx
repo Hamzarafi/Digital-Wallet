@@ -1,79 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactSelect from "react-select";
 import styled from "styled-components";
+import { Card, CurrencyExchangeRates } from "../../models/Objects/Response";
 import { Transaction } from "../../models/Objects/Transaction";
 import TransactionItem from "./TransactionItem";
 
 interface Props {
   isMobile: boolean;
+  selectedCard: Card | undefined;
+  currencyData: CurrencyExchangeRates | undefined;
 }
 
 const options = [
   { value: "TL", label: "TL" },
   { value: "USD", label: "USD" },
   { value: "EUR", label: "EUR" },
-  { value: "GBP", label: "GBP" },
+  { value: "CHF", label: "CHF" },
 ];
 
-function Transactions({ isMobile }: Props) {
-  const transdata: Transaction[] = [
-    {
-      amount: "482.79",
-      category: "entertainment",
-      company: "Konopelski, Johnson and Pacocha",
-      date: "2022-07-17T07:52:23.012Z",
-    },
-    {
-      amount: "10.93",
-      category: "grocery",
-      company: "Fisher Group",
-      date: "2021-10-01T18:18:29.682Z",
-    },
-    {
-      amount: "292.70",
-      category: "equipment",
-      company: "Keeling and Sons",
-      date: "2021-11-26T10:24:29.161Z",
-    },
-    {
-      amount: "482.79",
-      category: "entertainment",
-      company: "Konopelski, Johnson and Pacocha",
-      date: "2022-07-17T07:52:23.012Z",
-    },
-    {
-      amount: "10.93",
-      category: "grocery",
-      company: "Fisher Group",
-      date: "2021-10-01T18:18:29.682Z",
-    },
-    {
-      amount: "292.70",
-      category: "equipment",
-      company: "Keeling and Sons",
-      date: "2021-11-26T10:24:29.161Z",
-    },
-    {
-      amount: "482.79",
-      category: "entertainment",
-      company: "Konopelski, Johnson and Pacocha",
-      date: "2022-07-17T07:52:23.012Z",
-    },
-    {
-      amount: "10.93",
-      category: "grocery",
-      company: "Fisher Group",
-      date: "2021-10-01T18:18:29.682Z",
-    },
-    {
-      amount: "292.70",
-      category: "equipment",
-      company: "Keeling and Sons",
-      date: "2021-11-26T10:24:29.161Z",
-    },
-  ];
-
+function Transactions({ isMobile, selectedCard, currencyData }: Props) {
   const [currency, setCurrency] = useState({ value: "USD", label: "USD" });
+  const [currencyMultiplier, setCurrencyMultiplier] = useState(1);
 
   const currencyLogo = (cur: string) => {
     switch (cur) {
@@ -83,12 +30,32 @@ function Transactions({ isMobile }: Props) {
         return "₺";
       case "EUR":
         return "€";
-      case "GBP":
-        return "£";
+      case "CHF":
+        return "CHF";
       default:
         break;
     }
   };
+  useEffect(() => {
+    if (currencyData) {
+      switch (currency.value) {
+        case "USD":
+          setCurrencyMultiplier(1);
+          break;
+        case "TL":
+          setCurrencyMultiplier(parseFloat(currencyData?.usdToTry));
+          break;
+        case "EUR":
+          setCurrencyMultiplier(parseFloat(currencyData?.usdToEuro));
+          break;
+        case "CHF":
+          setCurrencyMultiplier(parseFloat(currencyData?.usdToChf));
+          break;
+        default:
+          break;
+      }
+    }
+  }, [currency]);
 
   return (
     <OuterContainer style={{ borderRadius: `${isMobile ? "30px" : "8px"}` }}>
@@ -98,7 +65,11 @@ function Transactions({ isMobile }: Props) {
         <div>
           <div className="balanceTitleContainer">Your Balance</div>
           <div className="amountContainer">
-            8.400,12 {currencyLogo(currency.value)}
+            {selectedCard?.amount
+              ? `${(
+                  parseFloat(selectedCard?.amount) * currencyMultiplier
+                ).toFixed(2)} ${currencyLogo(currency.value)}`
+              : "Could not load"}
           </div>
         </div>
         <DropListContainer>
@@ -119,12 +90,13 @@ function Transactions({ isMobile }: Props) {
       >
         <div style={{ marginBottom: "16px" }}>Transactions</div>
         <div>
-          {transdata.map((item, index) => {
+          {selectedCard?.transactions.map((item, index) => {
             return (
               <TransactionItem
                 key={`transaction-list-${index}`}
                 item={item}
                 isMobile={isMobile}
+                currencyMultiplier={currencyMultiplier}
               />
             );
           })}
@@ -138,6 +110,7 @@ const OuterContainer = styled.div`
   margin: 0 8px;
   max-width: 513px;
   background: #ffffff;
+  height: -webkit-fill-available;
 
   display: flex;
   flex-direction: column;

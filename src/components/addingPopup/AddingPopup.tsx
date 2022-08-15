@@ -3,10 +3,10 @@ import styled from "styled-components";
 
 interface Props {
   closeHandler: () => void;
-  handleSubmit: (formData: {}) => void;
+  handleSubmit: (formData: FormData) => void;
 }
 
-interface formData {
+export interface FormData {
   name: string;
   number: string;
   cvc: string;
