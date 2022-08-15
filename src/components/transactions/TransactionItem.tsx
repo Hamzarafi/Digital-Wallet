@@ -74,6 +74,7 @@ const ItemContainer = styled.div`
   }
   .lowerText {
     color: var(--color-dark-grey);
+    max-width: 200px;
   }
   .upperTextMobile {
     font-weight: var(--fontSize-mobile-sm);

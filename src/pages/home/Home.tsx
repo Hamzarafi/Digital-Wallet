@@ -26,13 +26,17 @@ function Home() {
   }, [pageWidth]);
 
   useEffect(() => {
+    getData();
+  }, []);
+
+  const getData = () => {
     fetch("https://62f63c8f612c13062b4997c6.mockapi.io/user/4846457457")
       .then((response) => response.json())
       .then((res) => {
         setApiData(res);
         if (res.cards && res.cards.length > 0) setSelectedCard(res.cards[0]);
       });
-  }, []);
+  };
 
   return (
     <div style={{ display: "flex", justifyContent: "center" }}>
