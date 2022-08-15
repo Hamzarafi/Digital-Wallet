@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import { toTitleCase } from "../../utilities/utils";
 
@@ -19,7 +19,20 @@ function WelcomeComponent({ isMobile }: Props) {
 
   //end
 
-  const [greeting, setGreeting] = useState<string>("Good Morning");
+  const [greeting, setGreeting] = useState<string>("");
+
+  useEffect(() => {
+    const now: Date = new Date();
+    const time: number = now.getHours();
+
+    if (time < 12 && time >= 6) {
+      setGreeting("Good Morning");
+    } else if (time < 18 && time >= 12) {
+      setGreeting("Good Afternoon");
+    } else {
+      setGreeting("Good Evening");
+    }
+  }, []);
 
   function getGenderTitle(gender: string) {
     switch (gender) {
@@ -27,9 +40,8 @@ function WelcomeComponent({ isMobile }: Props) {
         return "Mr.";
       case "female":
         return "Mrs.";
-
       default:
-        return;
+        return "";
     }
   }
 
