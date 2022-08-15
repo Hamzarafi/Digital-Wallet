@@ -4,21 +4,16 @@ import { toTitleCase } from "../../utilities/utils";
 
 interface Props {
   isMobile: boolean;
+  firstName: string | undefined;
+  lastName: string | undefined;
+  gender: string | undefined;
 }
 
 interface ITextStyled {
   isMobile: boolean;
 }
 
-function WelcomeComponent({ isMobile }: Props) {
-  //static test
-
-  const gender = "male";
-  const firstName = "zayn";
-  const lastName = "malik";
-
-  //end
-
+function WelcomeComponent({ isMobile, firstName, lastName, gender }: Props) {
   const [greeting, setGreeting] = useState<string>("");
 
   useEffect(() => {
@@ -48,9 +43,9 @@ function WelcomeComponent({ isMobile }: Props) {
   return (
     <OuterContainer>
       <GreetingContainer isMobile={isMobile}>{greeting}</GreetingContainer>
-      <NameContainer isMobile={isMobile}>{`${getGenderTitle(
-        gender
-      )} ${toTitleCase(firstName)} ${toTitleCase(lastName)}`}</NameContainer>
+      <NameContainer isMobile={isMobile}>{`${getGenderTitle(gender || "")} ${
+        firstName && toTitleCase(firstName)
+      } ${lastName && toTitleCase(lastName)}`}</NameContainer>
     </OuterContainer>
   );
 }

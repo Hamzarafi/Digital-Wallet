@@ -1,17 +1,21 @@
+import moment from "moment";
 import React from "react";
 import styled, { css } from "styled-components";
+import { Card } from "../../models/Objects/Response";
 
 interface Props {
-  cardInfo: any;
+  cardInfo: Card;
   index: number;
+  name: string;
+  onCardClick: (c: Card) => void;
 }
 
-function CreditCard({ cardInfo, index }: Props) {
+function CreditCard({ cardInfo, index, name, onCardClick }: Props) {
   return (
-    <OuterContainer index={index}>
+    <OuterContainer index={index} onClick={() => onCardClick(cardInfo)}>
       <ContentContainer>
         <LogoContainer>
-          {"5142 8164 6526 2563".charAt(0) == "5" ? (
+          {cardInfo.cardNumber.charAt(0) == "5" ? (
             <img
               src="assets/cardLogo/master.svg"
               style={{ marginTop: "-10px", marginBottom: "-10px" }}
@@ -21,16 +25,18 @@ function CreditCard({ cardInfo, index }: Props) {
           )}
         </LogoContainer>
         <NumberContainer>
-          {"5142-8164-6526-2563".replaceAll("-", " ")}
+          {cardInfo.cardNumber.replaceAll("-", " ")}
         </NumberContainer>
         <LowerContainer>
           <div>
             <Label>NAME</Label>
-            <FocusText>{"Zayn Malik".toUpperCase()}</FocusText>
+            <FocusText>{name.toUpperCase()}</FocusText>
           </div>
           <div>
             <Label>VALID TILL</Label>
-            <FocusText>05/34</FocusText>
+            <FocusText>
+              {moment(cardInfo.cardExpiration).format("MM/YY")}
+            </FocusText>
           </div>
         </LowerContainer>
       </ContentContainer>

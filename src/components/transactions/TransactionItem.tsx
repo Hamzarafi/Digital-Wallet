@@ -7,9 +7,10 @@ import { toTitleCase } from "../../utilities/utils";
 interface Props {
   item: Transaction;
   isMobile: boolean;
+  currencyMultiplier: number;
 }
 
-function TransactionItem({ item, isMobile }: Props) {
+function TransactionItem({ item, isMobile, currencyMultiplier }: Props) {
   const iconType = () => {
     switch (item.category) {
       case "entertainment":
@@ -42,7 +43,7 @@ function TransactionItem({ item, isMobile }: Props) {
         </InfoColumnContainer>
         <InfoColumnContainer className={`${isMobile ? "alignRight" : ""}`}>
           <div className={`upperText${isMobile ? "Mobile" : ""}`}>
-            {parseFloat(item.amount).toFixed(3)}
+            {(parseFloat(item.amount) * currencyMultiplier).toFixed(3)}
           </div>
           <div className={`lowerText${isMobile ? "Mobile" : ""}`}>
             {item.company}

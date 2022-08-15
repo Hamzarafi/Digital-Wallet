@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
+import { Card } from "../../models/Objects/Response";
 import AddingPage from "../addingPage/AddingPage";
 import CreditCard from "./CreditCard";
 
-interface Props {}
+interface Props {
+  cards: Card[] | undefined;
+  name: string;
+  onCardClick: (c: Card) => void;
+}
 
-function CreditCardList({}: Props) {
+function CreditCardList({ cards, name, onCardClick }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const togglePopup = () => {
@@ -20,11 +25,18 @@ function CreditCardList({}: Props) {
   return (
     <OuterContainer>
       <CardsContainer>
-        <CreditCard cardInfo={null} index={0} />
-        <CreditCard cardInfo={null} index={1} />
-        <CreditCard cardInfo={null} index={2} />
-        <CreditCard cardInfo={null} index={3} />
-        <CreditCard cardInfo={null} index={4} />
+        {cards &&
+          cards.map((card: Card, index: number) => {
+            return (
+              <CreditCard
+                cardInfo={card}
+                index={index}
+                name={name}
+                key={`card-mobile-list-${index}`}
+                onCardClick={onCardClick}
+              />
+            );
+          })}
       </CardsContainer>
       <CreditCardAdd onClick={() => togglePopup()}>
         <img src="./assets/icons/plus.svg" alt="+" /> Add Card
