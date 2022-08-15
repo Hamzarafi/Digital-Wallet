@@ -1,25 +1,68 @@
+import moment from "moment";
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
 import { Card } from "../../models/Objects/Response";
 import AddingPage from "../addingPage/AddingPage";
+import { FormData } from "../addingPopup/AddingPopup";
 import CreditCard from "./CreditCard";
 
 interface Props {
   cards: Card[] | undefined;
   name: string;
   onCardClick: (c: Card) => void;
+  refetch: () => void;
 }
 
-function CreditCardList({ cards, name, onCardClick }: Props) {
+function CreditCardList({ cards, name, onCardClick, refetch }: Props) {
   const [isOpen, setIsOpen] = useState(false);
 
   const togglePopup = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleFormSubmit = (formData: {}) => {
+  const handleFormSubmit = (formData: FormData) => {
     setIsOpen(false);
-    console.log(formData);
+    saveCard(
+      formData.number.match(/.{1,4}/g)?.join("-") || "",
+      formData.cvc,
+      moment(formData.exp, "MM/YYYY").toISOString()
+    );
+  };
+  const saveCard = (number: string, cvc: string, exp: string) => {
+    let newCardList: Card[];
+    if (cards) {
+      newCardList = [
+        ...cards,
+        {
+          amount: "0.00",
+          cardNumber: number,
+          cardExpiration: exp,
+          cardCvv: cvc,
+          transactions: [],
+        },
+      ];
+    } else {
+      newCardList = [
+        {
+          amount: "0.00",
+          cardNumber: number,
+          cardExpiration: exp,
+          cardCvv: cvc,
+          transactions: [],
+        },
+      ];
+    }
+    const requestOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ cards: newCardList }),
+    };
+    fetch(
+      "https://62f63c8f612c13062b4997c6.mockapi.io/user/4846457457",
+      requestOptions
+    )
+      .then((response) => response.json())
+      .then(() => refetch());
   };
 
   return (

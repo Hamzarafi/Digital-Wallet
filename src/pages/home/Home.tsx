@@ -57,12 +57,14 @@ function Home() {
               cards={apiData?.cards}
               name={`${apiData?.firstName} ${apiData?.lastName}`}
               onCardClick={setSelectedCard}
+              refetch={getData}
             />
           ) : (
             <CreditCardList
               cards={apiData?.cards}
               name={`${apiData?.firstName} ${apiData?.lastName}`}
               onCardClick={setSelectedCard}
+              refetch={getData}
             />
           )}
           <Transactions
