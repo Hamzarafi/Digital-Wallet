@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { css } from "styled-components";
+import AddingPopup from "../addingPopup/AddingPopup";
 import CreditCard from "./CreditCard";
 
 interface Props {
@@ -7,6 +8,17 @@ interface Props {
 }
 
 function CreditCardList({ isMobile }: Props) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const togglePopup = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleFormSubmit = (formData: {}) => {
+    setIsOpen(false);
+    console.log(formData);
+  };
+
   return (
     <OuterContainer>
       {!isMobile && <p>Credit Cards</p>}
@@ -16,11 +28,16 @@ function CreditCardList({ isMobile }: Props) {
         <CreditCard cardInfo={null} index={2} />
         <CreditCard cardInfo={null} index={3} />
         <CreditCard cardInfo={null} index={4} />
-        <CreditCard cardInfo={null} index={4} />
       </CardsContainer>
-      <CreditCardAdd onClick={() => console.log("addClicked")}>
+      <CreditCardAdd onClick={() => togglePopup()}>
         <img src="./assets/icons/plus-white.svg" alt="+" />
       </CreditCardAdd>
+      {isOpen && (
+        <AddingPopup
+          closeHandler={togglePopup}
+          handleSubmit={handleFormSubmit}
+        />
+      )}
     </OuterContainer>
   );
 }
