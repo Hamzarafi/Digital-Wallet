@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled, { css } from "styled-components";
-import AddingPopup from "../addingPopup/AddingPopup";
+import AddingPage from "../addingPage/AddingPage";
 import CreditCard from "./CreditCard";
 
 interface Props {}
@@ -19,7 +19,6 @@ function CreditCardList({}: Props) {
 
   return (
     <OuterContainer>
-      <p>Credit Cards</p>
       <CardsContainer>
         <CreditCard cardInfo={null} index={0} />
         <CreditCard cardInfo={null} index={1} />
@@ -28,10 +27,10 @@ function CreditCardList({}: Props) {
         <CreditCard cardInfo={null} index={4} />
       </CardsContainer>
       <CreditCardAdd onClick={() => togglePopup()}>
-        <img src="./assets/icons/plus-white.svg" alt="+" />
+        <img src="./assets/icons/plus.svg" alt="+" /> Add Card
       </CreditCardAdd>
       {isOpen && (
-        <AddingPopup
+        <AddingPage
           closeHandler={togglePopup}
           handleSubmit={handleFormSubmit}
         />
@@ -41,39 +40,31 @@ function CreditCardList({}: Props) {
 }
 
 const OuterContainer = styled.div`
-  margin: 0 8px;
-  background: #ffffff;
-  border-radius: 8px;
   height: 100%;
-
-  p {
-    margin: 20px 0px 32px 49px;
-    font-size: var(--fontSize-lg);
-    font-weight: var(--fontWeight-medium);
-  }
 `;
 
 const CardsContainer = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
+
   justify-content: center;
-  width: 400px;
-  overflow-y: scroll;
-  height: calc(100% - 80px);
+  overflow-x: scroll;
+  height: 200px;
 `;
 
-const CreditCardAdd = styled.div`
-  background: var(--color-brand);
-  height: 60px;
-  width: 60px;
-  border-radius: 30px;
-  position: relative;
-  top: -30px;
-  left: 170px;
+const CreditCardAdd = styled.button`
+  border-radius: 8px;
+  border: 1px solid var(--color-brand);
+  color: var(--color-brand);
+  background: var(--color-light-grey);
+  padding: 13px;
+  font-size: var(--fontSize-sm);
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 100%;
+  margin: 24px 0px 35px 0px;
 `;
 
 export default CreditCardList;

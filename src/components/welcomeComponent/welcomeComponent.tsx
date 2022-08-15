@@ -45,7 +45,6 @@ function WelcomeComponent({ isMobile }: Props) {
 
 const OuterContainer = styled.div`
   line-height: 30px;
-  margin-top: 45px;
   margin-bottom: 24px;
   padding-left: 8px;
 `;

@@ -4,6 +4,10 @@ import styled from "styled-components";
 import { Transaction } from "../../models/Objects/Transaction";
 import TransactionItem from "./TransactionItem";
 
+interface Props {
+  isMobile: boolean;
+}
+
 const options = [
   { value: "TL", label: "TL" },
   { value: "USD", label: "USD" },
@@ -11,7 +15,7 @@ const options = [
   { value: "GBP", label: "GBP" },
 ];
 
-function Transactions() {
+function Transactions({ isMobile }: Props) {
   const transdata: Transaction[] = [
     {
       amount: "482.79",
@@ -87,13 +91,15 @@ function Transactions() {
   };
 
   return (
-    <OuterContainer>
-      <HeaderContainer>
+    <OuterContainer style={{ borderRadius: `${isMobile ? "30px" : "8px"}` }}>
+      <div
+        className={`${isMobile ? "headerContainerMobile" : "headerContainer"}`}
+      >
         <div>
-          <BalanceTitleContainer>Your Balance</BalanceTitleContainer>
-          <AmountContainer>
+          <div className="balanceTitleContainer">Your Balance</div>
+          <div className="amountContainer">
             8.400,12 {currencyLogo(currency.value)}
-          </AmountContainer>
+          </div>
         </div>
         <DropListContainer>
           <ReactSelect
@@ -105,36 +111,80 @@ function Transactions() {
             isSearchable={false}
           />
         </DropListContainer>
-      </HeaderContainer>
-      <BottomInnerContainer>
+      </div>
+      <div
+        className={`${
+          isMobile ? "bottomInnerMobileContainer" : "bottomInnerContainer"
+        }`}
+      >
         <div style={{ marginBottom: "16px" }}>Transactions</div>
         <div>
           {transdata.map((item, index) => {
             return (
-              <TransactionItem key={`transaction-list-${index}`} item={item} />
+              <TransactionItem
+                key={`transaction-list-${index}`}
+                item={item}
+                isMobile={isMobile}
+              />
             );
           })}
         </div>
-      </BottomInnerContainer>
+      </div>
     </OuterContainer>
   );
 }
 
 const OuterContainer = styled.div`
   margin: 0 8px;
-  width: 513px;
+  max-width: 513px;
   background: #ffffff;
-  border-radius: 8px;
 
   display: flex;
   flex-direction: column;
-`;
 
-const HeaderContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 32px 65px;
+  .headerContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 32px 65px;
+
+    .balanceTitleContainer {
+      font-size: var(--fontSize-lg);
+    }
+
+    .amountContainer {
+      font-size: var(--fontSize-xxl);
+      font-weight: var(--fontWeight-bold);
+      font-family: "IBM Plex Mono";
+    }
+  }
+
+  .bottomInnerContainer {
+    padding: 0px 10px 32px 65px;
+    overflow-y: scroll;
+  }
+
+  .headerContainerMobile {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 32px 28px;
+    align-items: center;
+
+    .balanceTitleContainer {
+      font-size: var(--fontSize-sm: 14px);
+    }
+
+    .amountContainer {
+      font-size: 24px;
+      font-weight: var(--fontWeight-bold);
+      font-family: "IBM Plex Mono";
+    }
+  }
+
+  .bottomInnerMobileContainer {
+    padding: 0px 28px 28px 28px;
+  }
 `;
 
 const DropListContainer = styled.div`
@@ -142,19 +192,6 @@ const DropListContainer = styled.div`
   span {
     background: #ffffff;
   }
-`;
-
-const BalanceTitleContainer = styled.div`
-  font-size: var(--fontSize-lg);
-`;
-const AmountContainer = styled.div`
-  font-size: var(--fontSize-xxl);
-  font-weight: var(--fontWeight-bold);
-`;
-
-const BottomInnerContainer = styled.div`
-  padding: 0px 0px 32px 65px;
-  overflow-y: scroll;
 `;
 
 export default Transactions;

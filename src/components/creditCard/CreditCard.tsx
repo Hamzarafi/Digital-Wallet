@@ -25,11 +25,11 @@ function CreditCard({ cardInfo, index }: Props) {
         </NumberContainer>
         <LowerContainer>
           <div>
-            <Label>{"Name".toUpperCase()}</Label>
+            <Label>NAME</Label>
             <FocusText>{"Zayn Malik".toUpperCase()}</FocusText>
           </div>
           <div>
-            <Label>{"Valid Till".toUpperCase()}</Label>
+            <Label>VALID TILL</Label>
             <FocusText>05/34</FocusText>
           </div>
         </LowerContainer>
@@ -53,7 +53,7 @@ const NumberContainer = styled.div`
   margin: 15px 0;
   font-size: 17px;
   font-weight: 600;
-  letter-spacing: 5px;
+  letter-spacing: 3px;
 `;
 const LogoContainer = styled.div``;
 const ContentContainer = styled.div`
@@ -63,8 +63,10 @@ const ContentContainer = styled.div`
 
 const OuterContainer = styled("div")<{ index: number }>`
   margin-bottom: 23px;
+  margin-right: 5px;
   height: 174px;
   width: 312px;
+  font-family: "IBM Plex Mono";
 
   backdrop-filter: blur(81.7297px);
 
