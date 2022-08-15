@@ -110,6 +110,7 @@ const OuterContainer = styled.div`
   margin: 0 8px;
   max-width: 513px;
   background: #ffffff;
+  height: -webkit-fill-available;
 
   display: flex;
   flex-direction: column;
